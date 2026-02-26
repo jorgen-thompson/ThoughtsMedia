@@ -123,15 +123,14 @@
       if (!videoCards.length) return;
       videoCards.forEach((card) => {
         const videos = Array.from(card.querySelectorAll(".project-card-media video"));
-        if (!videos.length) return;
         const shouldPlay = card.classList.contains("is-active") && isProjectsNavActive();
 
-        if (!shouldPlay) {
-          videos.forEach((video) => video.pause());
-          return;
-        }
-
         videos.forEach((video) => {
+          if (!shouldPlay) {
+            video.pause();
+            return;
+          }
+
           const playPromise = video.play();
           if (playPromise && typeof playPromise.catch === "function") {
             playPromise.catch(() => {});

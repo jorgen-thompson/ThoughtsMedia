@@ -1,0 +1,63 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SITE_DIR: .
+      MAX_ARTIFACT_MB: 900
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout (with Git LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Pull LFS files
+        run: git lfs pull
+
+      - name: Validate deploy artifact size
+        run: |
+          set -euo pipefail
+          SIZE_KB=$(du -sk "${SITE_DIR}" | awk '{print $1}')
+          SIZE_MB=$((SIZE_KB / 1024))
+          echo "Site size: ${SIZE_MB} MB"
+          echo "Max allowed in workflow: ${MAX_ARTIFACT_MB} MB"
+
+          if [ "${SIZE_MB}" -gt "${MAX_ARTIFACT_MB}" ]; then
+            echo "::error::Deploy artifact is ${SIZE_MB} MB, above configured limit ${MAX_ARTIFACT_MB} MB."
+            echo "Largest files in ${SITE_DIR}:"
+            find "${SITE_DIR}" -type f -print0 \
+              | xargs -0 du -m \
+              | sort -nr \
+              | head -n 20
+            exit 1
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.SITE_DIR }}
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -18,8 +18,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SITE_DIR: .
-      MAX_ARTIFACT_MB: 900
+      SITE_DIR: dist
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -32,22 +31,19 @@ jobs:
       - name: Pull LFS files
         run: git lfs pull
 
-      - name: Validate deploy artifact size
+      - name: Prepare deploy artifact
         run: |
           set -euo pipefail
-          SIZE_KB=$(du -sk "${SITE_DIR}" | awk '{print $1}')
-          SIZE_MB=$((SIZE_KB / 1024))
-          echo "Site size: ${SIZE_MB} MB"
-          echo "Max allowed in workflow: ${MAX_ARTIFACT_MB} MB"
+          rm -rf "${SITE_DIR}"
+          mkdir -p "${SITE_DIR}"
 
-          if [ "${SIZE_MB}" -gt "${MAX_ARTIFACT_MB}" ]; then
-            echo "::error::Deploy artifact is ${SIZE_MB} MB, above configured limit ${MAX_ARTIFACT_MB} MB."
-            echo "Largest files in ${SITE_DIR}:"
-            find "${SITE_DIR}" -type f -print0 \
-              | xargs -0 du -m \
-              | sort -nr \
-              | head -n 20
-            exit 1
+          cp -R Assets "${SITE_DIR}/Assets"
+          cp -R css "${SITE_DIR}/css"
+          cp -R js "${SITE_DIR}/js"
+          cp ./*.html "${SITE_DIR}/"
+
+          if [ -f "CNAME" ]; then
+            cp CNAME "${SITE_DIR}/CNAME"
           fi
 
       - name: Setup Pages

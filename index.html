@@ -37,7 +37,7 @@
     
     <!-- Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=BBH+Bartle&family=BBH+Bogle&display=swap"
+      href="https://fonts.googleapis.com/css2?family=BBH+Bartle&family=Space+Grotesk:wght@400;500;700&family=BBH+Bogle&display=swap"
       rel="stylesheet"
     />
 
@@ -78,6 +78,11 @@
   <body>
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <div class="hero-title-lockup" aria-hidden="true">
+      <p class="hero-title-top">Turning thoughts</p>
+      <div class="hero-title-bottom">into reality</div>
+    </div>
 
     <!-- =========================
          FIXED HEADER
@@ -163,7 +168,7 @@
       <!-- HERO SECTION -->
       <section id="hero" class="hero-section" aria-labelledby="hero-title">
         <div class="hero-content">
-          <h1 id="hero-title" class="hero-title">Turning thoughts into reality</h1>
+          <h1 id="hero-title" class="sr-only">Turning thoughts into reality</h1>
           <p class="hero-subtitle">Professional Video Editor & Motion Graphics Designer</p>
           <p class="hero-description">Specializing in high-impact YouTube content, talking-head videos, and digital-first storytelling</p>
           <div class="hero-cta">
@@ -192,6 +197,10 @@
                 <p class="about-text">
                   Working primarily in <strong>DaVinci Resolve</strong> and <strong>Fusion</strong>, I leverage efficient, precision-driven workflows that enable rapid iteration without compromising on polish or quality. My work is rooted in clarity and intention—turning information into memorable moments.
                 </p>
+              </div>
+
+              <div class="about-actions">
+                <a class="btn btn-secondary" href="bio-and-artist-statement.html">Full Bio & Artist Statement</a>
               </div>
             </div>
 
@@ -226,6 +235,10 @@
               <p class="service-desc">Short-form video content designed for maximum impact on Instagram, TikTok, and other social platforms.</p>
             </article>
           </div>
+
+          <div class="services-actions">
+            <a class="btn btn-secondary" href="workflow.html">View Workflow</a>
+          </div>
         </div>
       </section>
 
@@ -246,10 +259,10 @@
             <button class="projects-arrow projects-arrow--prev" type="button" aria-label="View previous project">‹</button>
             
             <div class="projects-track" role="region" aria-live="polite">
-              <article class="project-card project-card--has-video" data-category="motion" data-href="project-asking-better-questions.html">
+              <article class="project-card project-card--has-video" data-category="motion" data-href="project-motion-design-showreel.html">
                 <div class="project-card-media" aria-hidden="true">
-                  <video autoplay muted loop playsinline preload="metadata">
-                    <source src="Assets/Video/Motion_Design_Showreel.mp4" type="video/mp4" />
+                  <video class="lazy-video" muted loop playsinline preload="none" poster="Assets/Images/motion_design_showreel.png" data-autoload="active">
+                    <source data-src="Assets/Video/Motion_Design_Showreel.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div class="project-card-content">
@@ -259,10 +272,10 @@
                 </div>
               </article>
               
-              <article class="project-card project-card--has-video" data-category="talking" data-href="project-cyber-security.html">
+              <article class="project-card project-card--has-video" data-category="talking" data-href="project-alien-earth-new-creations-explained.html">
                 <div class="project-card-media" aria-hidden="true">
-                  <video autoplay muted loop playsinline preload="metadata">
-                    <source src="Assets/Video/alien-earth-new-creations_long.mp4" type="video/mp4" />
+                  <video class="lazy-video" muted loop playsinline preload="none" poster="Assets/Images/alien-earth-new-creations.png" data-autoload="active">
+                    <source data-src="Assets/Video/alien-earth-new-creations_long.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div class="project-card-content">
@@ -272,13 +285,10 @@
                 </div>
               </article>
               
-              <article class="project-card project-card--has-video project-card--vertical-video" data-category="social" data-href="project-digital-marketing.html">
+              <article class="project-card project-card--has-video project-card--vertical-video" data-category="social" data-href="project-the-distortus-rex-is.html">
                 <div class="project-card-media" aria-hidden="true">
-                  <video class="project-card-media-bg" autoplay muted loop playsinline preload="metadata">
-                    <source src="Assets/Video/distortus-rex-theory.mp4" type="video/mp4" />
-                  </video>
-                  <video autoplay muted loop playsinline preload="metadata">
-                    <source src="Assets/Video/distortus-rex-theory.mp4" type="video/mp4" />
+                  <video class="lazy-video" muted loop playsinline preload="none" poster="Assets/Images/distortus-rex-thumb.png" data-autoload="active">
+                    <source data-src="Assets/Video/distortus-rex-theory.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div class="project-card-content">
@@ -288,10 +298,10 @@
                 </div>
               </article>
               
-              <article class="project-card project-card--has-video" data-category="narrative" data-loop-start="42" data-href="project-ecommerce-store.html">
+              <article class="project-card project-card--has-video" data-category="narrative" data-loop-start="42" data-href="project-the-interface.html">
                 <div class="project-card-media" aria-hidden="true">
-                  <video autoplay muted loop playsinline preload="metadata">
-                    <source src="Assets/Video/JorgenThompson_Proj3.mp4" type="video/mp4" />
+                  <video class="lazy-video" muted loop playsinline preload="none" poster="Assets/Images/THE-INTERFACE.png" data-autoload="active">
+                    <source data-src="Assets/Video/JorgenThompson_Proj3.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div class="project-card-content">
@@ -301,10 +311,10 @@
                 </div>
               </article>
 
-              <article class="project-card project-card--has-video" data-category="promo" data-loop-start="61" data-href="project-launch-sequence.html">
+              <article class="project-card project-card--has-video" data-category="promo" data-loop-start="61" data-href="project-carpet-cleaning-by-luke-workout.html">
                 <div class="project-card-media" aria-hidden="true">
-                  <video autoplay muted loop playsinline preload="metadata">
-                    <source src="Assets/Video/Luke-workout_video.mp4" type="video/mp4" />
+                  <video class="lazy-video" muted loop playsinline preload="none" poster="Assets/Images/luke-workout-thumb.png" data-autoload="active">
+                    <source data-src="Assets/Video/Luke-workout_video.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div class="project-card-content">
@@ -342,7 +352,9 @@
         <div class="contact-container">
           <!-- LEFT: contact form -->
           <div class="contact-form-wrapper">
-            <form class="contact-form" autocomplete="on" aria-label="Contact form">
+            <form class="contact-form" autocomplete="on" aria-label="Contact form" method="POST" action="https://formspree.io/f/xvzvypqe">
+              <input type="hidden" name="_subject" value="New portfolio inquiry from Thoughts Media" />
+              <input type="hidden" name="_captcha" value="false" />
               <div class="form-row">
                 <label class="field">
                   <span>First name <abbr title="required" aria-label="required">*</abbr></span>
@@ -371,6 +383,7 @@
               </label>
 
               <button class="submit" type="submit">Send Message</button>
+              <p class="contact-form-status" aria-live="polite"></p>
             </form>
           </div>
 

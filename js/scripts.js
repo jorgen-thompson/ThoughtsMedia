@@ -10,6 +10,38 @@
   const mobileMenu = document.querySelector(".mobile-menu");
   const dropdownToggles = document.querySelectorAll(".nav-dropdown .dropdown-toggle");
   const year = document.getElementById("year");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const hasFinePointer = window.matchMedia("(pointer: fine)");
+
+  function loadVideo(video) {
+    if (!video) return Promise.resolve(null);
+    if (video.dataset.videoLoaded === "true") return Promise.resolve(video);
+
+    const lazySources = Array.from(video.querySelectorAll("source[data-src]"));
+    if (!lazySources.length) {
+      video.dataset.videoLoaded = "true";
+      return Promise.resolve(video);
+    }
+
+    lazySources.forEach((source) => {
+      if (!source.getAttribute("src")) {
+        source.setAttribute("src", source.dataset.src || "");
+      }
+    });
+
+    video.dataset.videoLoaded = "true";
+    video.load();
+
+    if (video.readyState >= 1) {
+      return Promise.resolve(video);
+    }
+
+    return new Promise((resolve) => {
+      const finish = () => resolve(video);
+      video.addEventListener("loadedmetadata", finish, { once: true });
+      video.addEventListener("error", finish, { once: true });
+    });
+  }
 
   // Set current year
   if (year) year.textContent = new Date().getFullYear();
@@ -20,6 +52,9 @@
   (() => {
     const vignette = document.querySelector(".vignette");
     const rootStyle = document.documentElement.style;
+    let rafId = null;
+
+    if (!vignette || prefersReducedMotion.matches || !hasFinePointer.matches) return;
 
     function setVignettePos(clientX, clientY) {
       const x = (clientX / window.innerWidth) * 100;
@@ -31,13 +66,40 @@
     }
 
     window.addEventListener("mousemove", (e) => {
-      setVignettePos(e.clientX, e.clientY);
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        setVignettePos(e.clientX, e.clientY);
+      });
     }, { passive: true });
+  })();
 
-    window.addEventListener("touchmove", (e) => {
-      const t = e.touches?.[0];
-      if (t) setVignettePos(t.clientX, t.clientY);
-    }, { passive: true });
+  /* =========================
+     LAZY VIDEO LOADING
+     ========================= */
+  (() => {
+    const visibleLazyVideos = Array.from(document.querySelectorAll('video.lazy-video[data-autoload="visible"]'));
+    if (!visibleLazyVideos.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      visibleLazyVideos.forEach((video) => {
+        loadVideo(video);
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          loadVideo(entry.target);
+          obs.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "300px 0px" }
+    );
+
+    visibleLazyVideos.forEach((video) => observer.observe(video));
   })();
 
   /* =========================
@@ -101,6 +163,64 @@
   })();
 
   /* =========================
+     HERO BACKGROUND TITLE
+     ========================= */
+  (() => {
+    const heroSection = document.querySelector(".hero-section");
+    const heroTitle = document.querySelector(".hero-title-lockup");
+    if (!heroSection || !heroTitle) return;
+
+    let hasEntered = false;
+    let rafId = null;
+
+    function updateHeroTitleOpacity() {
+      const rect = heroSection.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
+      const distance = Math.max(rect.height * 0.65, viewportHeight * 0.7);
+      const progress = Math.min(Math.max((-rect.top) / distance, 0), 1);
+      const opacity = 1 - progress * 0.82;
+      heroTitle.style.setProperty("--hero-title-overlay-opacity", opacity.toFixed(3));
+    }
+
+    function requestOpacityUpdate() {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        updateHeroTitleOpacity();
+      });
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      heroTitle.classList.add("is-active");
+      heroTitle.classList.add("is-entering");
+      updateHeroTitleOpacity();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          heroTitle.classList.toggle("is-active", entry.isIntersecting);
+          if (entry.isIntersecting && !hasEntered) {
+            hasEntered = true;
+            heroTitle.classList.add("is-entering");
+            window.setTimeout(() => heroTitle.classList.remove("is-entering"), 950);
+          }
+        });
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "-10% 0px -20% 0px"
+      }
+    );
+
+    observer.observe(heroSection);
+    window.addEventListener("scroll", requestOpacityUpdate, { passive: true });
+    window.addEventListener("resize", requestOpacityUpdate, { passive: true });
+    updateHeroTitleOpacity();
+  })();
+
+  /* =========================
      PROJECTS CAROUSEL
      ========================= */
   (() => {
@@ -131,10 +251,12 @@
             return;
           }
 
-          const playPromise = video.play();
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => {});
-          }
+          loadVideo(video).then(() => {
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === "function") {
+              playPromise.catch(() => {});
+            }
+          });
         });
       });
     }
@@ -273,7 +395,6 @@
       updateFeaturedCardVideoPlayback();
     };
     requestAnimationFrame(centerFirstProject);
-    window.addEventListener("load", centerFirstProject, { once: true });
 
     // Dot navigation
     projectsDots.forEach((dot, index) => {
@@ -478,13 +599,80 @@
   })();
 
   /* =========================
+     WORKFLOW NODE REVEAL
+     ========================= */
+  (() => {
+    const nodes = Array.from(document.querySelectorAll(".workflow-page .workflow-stage-card"));
+    if (!nodes.length || prefersReducedMotion.matches) return;
+
+    nodes.forEach((node) => {
+      node.style.opacity = "0";
+      node.style.transform = "scale(0.86)";
+      node.style.animation = "none";
+    });
+
+    const revealNodes = () => {
+      nodes.forEach((node, index) => {
+        window.setTimeout(() => {
+          node.style.animation = "bouncyZoomIn 1100ms cubic-bezier(0.2, 1.1, 0.4, 1) both";
+          node.style.opacity = "1";
+          node.style.transform = "scale(1)";
+        }, index * 140);
+      });
+    };
+
+    const queueReveal = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(revealNodes);
+      });
+    };
+
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", queueReveal, { once: true });
+    } else {
+      queueReveal();
+    }
+  })();
+
+  /* =========================
+     PROJECT DETAIL YOUTUBE PLAY BUTTON
+     ========================= */
+  (() => {
+    const mediaTile = document.querySelector(".project-detail-page .project-media-tile--youtube");
+    const playBtn = mediaTile?.querySelector(".project-media-play-btn");
+    if (!mediaTile || !playBtn) return;
+
+    const embedSrc = mediaTile.dataset.embedSrc;
+    const embedTitle = mediaTile.dataset.embedTitle || "Project video";
+    if (!embedSrc) return;
+
+    playBtn.addEventListener("click", () => {
+      if (mediaTile.dataset.embedLoaded === "true") return;
+
+      const iframe = document.createElement("iframe");
+      iframe.className = "project-media-embed";
+      iframe.src = embedSrc;
+      iframe.title = embedTitle;
+      iframe.loading = "eager";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+
+      mediaTile.appendChild(iframe);
+      mediaTile.dataset.embedLoaded = "true";
+      playBtn.classList.add("is-hidden");
+      playBtn.setAttribute("aria-hidden", "true");
+    });
+  })();
+
+  /* =========================
      PROJECT DETAIL VIDEO PLAY BUTTON
      ========================= */
   (() => {
-    const mediaTile = document.querySelector(".project-detail-page .project-media-tile--has-video");
+    const mediaTile = document.querySelector(
+      ".project-detail-page .project-media-tile--has-video:not(.project-media-tile--youtube)"
+    );
     const primaryVideo = mediaTile?.querySelector(".project-media-video");
-    const syncVideos = mediaTile ? Array.from(mediaTile.querySelectorAll(".project-media-video, .project-media-video-bg")) : [];
-    const backgroundVideos = syncVideos.filter((v) => v !== primaryVideo);
     const playBtn = mediaTile?.querySelector(".project-media-play-btn");
     if (!mediaTile || !primaryVideo || !playBtn) return;
     const previewTimeSeconds = Number(primaryVideo.dataset.previewTime);
@@ -500,9 +688,7 @@
       if (!Number.isFinite(primaryVideo.duration) || primaryVideo.duration <= 0) return;
       const target = Math.min(previewTimeSeconds, Math.max(primaryVideo.duration - 0.1, 0));
       if (target <= 0) return;
-      syncVideos.forEach((video) => {
-        video.currentTime = target;
-      });
+      primaryVideo.currentTime = target;
     };
 
     if (hasPreviewTime) {
@@ -510,61 +696,25 @@
       primaryVideo.addEventListener("seeked", () => {
         if (!previewFrameReady) {
           previewFrameReady = true;
-          syncVideos.forEach((video) => video.pause());
+          primaryVideo.pause();
         }
       });
     }
 
-    syncVideos.forEach((video) => {
-      video.loop = false;
-      video.playsInline = true;
-    });
+    primaryVideo.loop = false;
+    primaryVideo.playsInline = true;
     primaryVideo.muted = false;
-    backgroundVideos.forEach((video) => {
-      video.muted = true;
-    });
-
-    const syncBackgroundVideos = () => {
-      backgroundVideos.forEach((video) => {
-        if (Math.abs(video.currentTime - primaryVideo.currentTime) > 0.08) {
-          video.currentTime = primaryVideo.currentTime;
-        }
-      });
-    };
-
-    const playBackgroundVideos = () => {
-      backgroundVideos.forEach((video) => {
-        const playPromise = video.play();
-        if (playPromise && typeof playPromise.catch === "function") {
-          playPromise.catch(() => {});
-        }
-      });
-    };
-
-    const pauseBackgroundVideos = () => {
-      backgroundVideos.forEach((video) => video.pause());
-    };
-
-    primaryVideo.addEventListener("timeupdate", syncBackgroundVideos);
-    primaryVideo.addEventListener("play", playBackgroundVideos);
-    primaryVideo.addEventListener("pause", pauseBackgroundVideos);
-    primaryVideo.addEventListener("seeking", syncBackgroundVideos);
-    primaryVideo.addEventListener("seeked", syncBackgroundVideos);
     primaryVideo.controls = false;
 
     playBtn.addEventListener("click", () => {
       if (previewFrameReady && primaryVideo.currentTime > 1) {
-        syncVideos.forEach((video) => {
-          video.currentTime = 0;
-        });
+        primaryVideo.currentTime = 0;
       }
       primaryVideo.controls = true;
-      syncVideos.forEach((video) => {
-        const playPromise = video.play();
-        if (playPromise && typeof playPromise.catch === "function") {
-          playPromise.catch(() => {});
-        }
-      });
+      const playPromise = primaryVideo.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
     });
 
     primaryVideo.addEventListener("play", hidePlayButton, { once: true });
@@ -576,25 +726,54 @@
   document.addEventListener("submit", (e) => {
     if (e.target.matches(".contact-form")) {
       e.preventDefault();
-      
-      // Get form data
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData);
-      
-      console.log("Form submitted:", data);
-      
-      // Show success message
-      alert("Thank you for your message! I'll get back to you soon.");
-      
-      // Reset form
-      e.target.reset();
-      
-      // In production, you would send this to your backend:
-      // fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data)
-      // }).then(response => { ... });
+
+      const form = e.target;
+      const endpoint = form.getAttribute("action") || "";
+      const status = form.querySelector(".contact-form-status");
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      if (!endpoint) {
+        if (status) {
+          status.textContent = "This form is missing a submission endpoint.";
+        } else {
+          alert("This form is missing a submission endpoint.");
+        }
+        return;
+      }
+
+      const formData = new FormData(form);
+
+      if (status) status.textContent = "Sending...";
+      if (submitButton) submitButton.disabled = true;
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json"
+        },
+        body: formData
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error("Submission failed");
+          }
+          form.reset();
+          if (status) {
+            status.textContent = "Thank you. Your message was sent.";
+          } else {
+            alert("Thank you. Your message was sent.");
+          }
+        })
+        .catch(() => {
+          if (status) {
+            status.textContent = "Something went wrong. Please try again.";
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
+        })
+        .finally(() => {
+          if (submitButton) submitButton.disabled = false;
+        });
     }
   });
 

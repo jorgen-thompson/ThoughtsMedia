@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="tech-frame" x1="9" y1="10" x2="55" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0F4FF"/>
+      <stop offset="0.42" stop-color="#8DD8FF"/>
+      <stop offset="0.78" stop-color="#D56EFF"/>
+      <stop offset="1" stop-color="#6B2A86"/>
+    </linearGradient>
+    <linearGradient id="tech-t" x1="32" y1="18" x2="32" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#AFE8FF"/>
+    </linearGradient>
+    <filter id="tech-glow" x="6" y="7" width="52" height="50" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#78D7FF" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <path d="M18 11H43L53 21V46C53 50.4183 49.4183 54 45 54H19C14.5817 54 11 50.4183 11 46V19C11 14.5817 14.5817 11 19 11Z" stroke="url(#tech-frame)" stroke-width="3"/>
+  <path d="M43 11V18C43 19.6569 44.3431 21 46 21H53" stroke="url(#tech-frame)" stroke-width="3" stroke-linecap="round"/>
+  <g filter="url(#tech-glow)">
+    <path d="M20 22H44" stroke="url(#tech-t)" stroke-width="4.4" stroke-linecap="round"/>
+    <path d="M32 22V42" stroke="url(#tech-t)" stroke-width="4.4" stroke-linecap="round"/>
+  </g>
+  <circle cx="48" cy="18" r="2.2" fill="#7DE0FF"/>
+</svg>

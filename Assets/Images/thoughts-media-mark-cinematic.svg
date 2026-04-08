@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <radialGradient id="cine-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(32 26) rotate(90) scale(26)">
+      <stop stop-color="#6E2B1D" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#0B0A0F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cine-frame-fill" x1="14" y1="12" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17141A"/>
+      <stop offset="1" stop-color="#0D0A10"/>
+    </linearGradient>
+    <linearGradient id="cine-frame-stroke" x1="10" y1="9" x2="54" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFEFE4"/>
+      <stop offset="0.38" stop-color="#F2B08C"/>
+      <stop offset="0.72" stop-color="#C5522F"/>
+      <stop offset="1" stop-color="#5B170F"/>
+    </linearGradient>
+    <linearGradient id="cine-t" x1="32" y1="18" x2="32" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F3"/>
+      <stop offset="0.54" stop-color="#F7CCB4"/>
+      <stop offset="1" stop-color="#D27553"/>
+    </linearGradient>
+    <linearGradient id="cine-flare" x1="18" y1="16" x2="46" y2="23" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F3" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#FFF8F3" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="cine-shadow" x="4" y="4" width="56" height="56" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity="0.34"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#D65B35" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <circle cx="32" cy="32" r="28" fill="url(#cine-glow)"/>
+  <g filter="url(#cine-shadow)">
+    <rect x="10" y="10" width="44" height="44" rx="14" fill="url(#cine-frame-fill)"/>
+    <rect x="10" y="10" width="44" height="44" rx="14" stroke="url(#cine-frame-stroke)" stroke-width="2.8"/>
+    <path d="M20 22H44" stroke="url(#cine-t)" stroke-width="4.6" stroke-linecap="round"/>
+    <path d="M32 22V43" stroke="url(#cine-t)" stroke-width="4.6" stroke-linecap="round"/>
+    <path d="M17 16.5C24 13 32 12.1 47 13.9" stroke="url(#cine-flare)" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="47" cy="18" r="2.4" fill="#E0673C"/>
+  </g>
+</svg>

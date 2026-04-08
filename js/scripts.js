@@ -178,7 +178,7 @@
       const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
       const distance = Math.max(rect.height * 0.65, viewportHeight * 0.7);
       const progress = Math.min(Math.max((-rect.top) / distance, 0), 1);
-      const opacity = 1 - progress * 0.82;
+      const opacity = 1 - progress * 0.80;
       heroTitle.style.setProperty("--hero-title-overlay-opacity", opacity.toFixed(3));
     }
 
@@ -266,7 +266,6 @@
       if (!videos.length) return;
       const loopStart = Number(card.dataset.loopStart || 0);
       const safeLoopStart = Number.isFinite(loopStart) && loopStart >= 0 ? loopStart : 0;
-      const loopEnd = safeLoopStart + featuredVideoLoopSeconds;
 
       videos.forEach((video) => {
         video.loop = false;
@@ -277,9 +276,26 @@
       const primaryVideo = videos[0];
       const secondaryVideos = videos.slice(1);
 
+      const getLoopBounds = (video) => {
+        const duration = Number(video.duration);
+        if (!Number.isFinite(duration) || duration <= 0) {
+          return {
+            start: safeLoopStart,
+            end: safeLoopStart + featuredVideoLoopSeconds
+          };
+        }
+
+        const maxStart = Math.max(duration - featuredVideoLoopSeconds, 0);
+        const start = Math.min(safeLoopStart, maxStart);
+        const end = Math.min(start + featuredVideoLoopSeconds, Math.max(duration - 0.05, start));
+
+        return { start, end };
+      };
+
       const seekAllToLoopStart = () => {
         videos.forEach((video) => {
-          const target = Math.min(safeLoopStart, Math.max(video.duration - 0.1, 0));
+          const { start } = getLoopBounds(video);
+          const target = Math.min(start, Math.max(video.duration - 0.1, 0));
           video.currentTime = target > 0 ? target : 0;
         });
       };
@@ -293,7 +309,8 @@
       };
 
       primaryVideo.addEventListener("timeupdate", () => {
-        if (primaryVideo.currentTime >= loopEnd || primaryVideo.currentTime < safeLoopStart) {
+        const { start, end } = getLoopBounds(primaryVideo);
+        if (primaryVideo.currentTime >= end || primaryVideo.currentTime < start) {
           seekAllToLoopStart();
         } else {
           syncSecondaryVideos();
@@ -301,9 +318,20 @@
       });
 
       videos.forEach((video) => {
+        video.addEventListener("ended", () => {
+          seekAllToLoopStart();
+          if (card.classList.contains("is-active") && isProjectsNavActive()) {
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === "function") {
+              playPromise.catch(() => {});
+            }
+          }
+        });
+
         video.addEventListener("loadedmetadata", () => {
-          const target = Math.min(safeLoopStart, Math.max(video.duration - 0.1, 0));
-          if (video.currentTime > loopEnd || video.currentTime < safeLoopStart) {
+          const { start, end } = getLoopBounds(video);
+          const target = Math.min(start, Math.max(video.duration - 0.1, 0));
+          if (video.currentTime > end || video.currentTime < start) {
             video.currentTime = target > 0 ? target : 0;
           }
         });

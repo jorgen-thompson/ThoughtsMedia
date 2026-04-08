@@ -132,6 +132,9 @@ body::before {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   margin-right: auto;
   font-size: clamp(16px, 3vw, 20px);
   font-family: var(--font-brand);
@@ -143,6 +146,17 @@ body::before {
   opacity: 0.95;
   transition: opacity 160ms ease, transform 160ms ease;
 }
+
+.brand::before {
+  content: "";
+  width: clamp(34px, 3.8vw, 42px);
+  height: clamp(34px, 3.8vw, 42px);
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: center / contain no-repeat url("../Assets/Images/thoughts-media-mark-new.svg");
+  filter: drop-shadow(0 0 10px rgba(201, 66, 36, 0.14));
+}
+
 .brand:hover { 
   opacity: 1; 
   transform: translateY(-1px); 
@@ -488,11 +502,11 @@ body::before {
   text-transform: uppercase;
   text-align: center;
   margin: 0;
-  background: linear-gradient(180deg, rgba(255, 248, 242, 0.58), rgba(228, 180, 160, 0.38) 42%, rgba(176, 106, 84, 0.28) 76%, rgba(22, 18, 18, 0.16));
+  background: linear-gradient(180deg, rgba(255, 248, 242, 0.58), rgba(228, 180, 160, 0.5) 42%, rgba(176, 106, 84, 0.3) 76%, rgba(22, 18, 18, 0.5));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  opacity: 0.66;
+  opacity: 0.7;
   mix-blend-mode: screen;
   filter: blur(0.4px);
   text-shadow: 0 0 32px rgba(255, 140, 96, 0.06);
@@ -1788,7 +1802,7 @@ body::before {
 
 .workflow-system-intro {
   max-width: 760px;
-  margin: 0 auto clamp(34px, 5vw, 52px);
+  margin: clamp(34px, 5vw, 52px);
   text-align: center;
 }
 

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="frameFill" x1="13" y1="11" x2="51" y2="53" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17191E"/>
+      <stop offset="0.55" stop-color="#0E1014"/>
+      <stop offset="1" stop-color="#060709"/>
+    </linearGradient>
+    <linearGradient id="frameStroke" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C211D"/>
+      <stop offset="0.42" stop-color="#E4A286"/>
+      <stop offset="0.7" stop-color="#C45C3A"/>
+      <stop offset="1" stop-color="#6F1B18"/>
+    </linearGradient>
+    <linearGradient id="tFill" x1="32" y1="16" x2="32" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F4"/>
+      <stop offset="0.36" stop-color="#F2D1C0"/>
+      <stop offset="0.72" stop-color="#D29176"/>
+      <stop offset="1" stop-color="#A2472E"/>
+    </linearGradient>
+  </defs>
+  <rect x="7.5" y="7.5" width="49" height="49" rx="15.5" fill="url(#frameFill)"/>
+  <rect x="7.5" y="7.5" width="49" height="49" rx="15.5" stroke="url(#frameStroke)" stroke-width="3"/>
+  <path d="M19 21.5C19 20.3954 19.8954 19.5 21 19.5H43C44.1046 19.5 45 20.3954 45 21.5C45 22.6046 44.1046 23.5 43 23.5H35.25V43.25C35.25 44.3546 34.3546 45.25 33.25 45.25H30.75C29.6454 45.25 28.75 44.3546 28.75 43.25V23.5H21C19.8954 23.5 19 22.6046 19 21.5Z" fill="url(#tFill)"/>
+  <circle cx="48.5" cy="16.5" r="2.2" fill="#C8382B"/>
+</svg>

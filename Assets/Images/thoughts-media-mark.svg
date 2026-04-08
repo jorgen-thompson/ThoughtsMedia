@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="frameFill" x1="14" y1="12" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#191B1F"/>
+      <stop offset="0.5" stop-color="#0E1014"/>
+      <stop offset="1" stop-color="#050608"/>
+    </linearGradient>
+    <linearGradient id="frameStroke" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7F9FC"/>
+      <stop offset="0.24" stop-color="#B9C2CF"/>
+      <stop offset="0.5" stop-color="#6D7480"/>
+      <stop offset="0.76" stop-color="#D6A487"/>
+      <stop offset="1" stop-color="#5A2C1A"/>
+    </linearGradient>
+    <linearGradient id="stem" x1="32" y1="20" x2="32" y2="43" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDFEFF"/>
+      <stop offset="0.32" stop-color="#C9D1DB"/>
+      <stop offset="0.68" stop-color="#7F8995"/>
+      <stop offset="1" stop-color="#D5A085"/>
+    </linearGradient>
+    <linearGradient id="highlight" x1="17" y1="16" x2="46" y2="23" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="metal-shadow" x="5" y="5" width="54" height="54" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <g filter="url(#metal-shadow)">
+    <rect x="10" y="10" width="44" height="44" rx="14" fill="url(#frameFill)"/>
+    <rect x="10" y="10" width="44" height="44" rx="14" stroke="url(#frameStroke)" stroke-width="3"/>
+    <path d="M20 22H44" stroke="url(#stem)" stroke-width="4.4" stroke-linecap="round"/>
+    <path d="M32 22V42" stroke="url(#stem)" stroke-width="4.4" stroke-linecap="round"/>
+    <path d="M17 17C24 14.2 33 13.2 46 15" stroke="url(#highlight)" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="47" cy="18" r="2.2" fill="#B86A4D"/>
+  </g>
+</svg>

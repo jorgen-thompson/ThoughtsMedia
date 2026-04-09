@@ -75,6 +75,88 @@
   })();
 
   /* =========================
+     CUSTOM CURSOR
+     ========================= */
+  (() => {
+    if (prefersReducedMotion.matches || !hasFinePointer.matches) return;
+
+    const body = document.body;
+    if (!body) return;
+
+    const cursorDot = document.createElement("div");
+    const cursorRing = document.createElement("div");
+    cursorDot.className = "cursor-dot";
+    cursorRing.className = "cursor-ring";
+    body.append(cursorRing, cursorDot);
+
+    const interactiveSelector = [
+      "a",
+      "button",
+      ".project-card",
+      ".project-action",
+      ".projects-arrow",
+      ".submit",
+      ".dropdown-toggle",
+      "input",
+      "textarea",
+      "summary",
+      "[role='button']"
+    ].join(", ");
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    let rafId = null;
+
+    function renderCursor() {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+      cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+
+      if (Math.abs(mouseX - ringX) > 0.15 || Math.abs(mouseY - ringY) > 0.15) {
+        rafId = window.requestAnimationFrame(renderCursor);
+      } else {
+        rafId = null;
+      }
+    }
+
+    function queueRender() {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(renderCursor);
+    }
+
+    function setHoverState(target) {
+      const interactiveTarget = target?.closest?.(interactiveSelector);
+      const textTarget = target?.closest?.("input, textarea");
+      body.classList.toggle("custom-cursor-hover", !!interactiveTarget && !textTarget);
+      body.classList.toggle("custom-cursor-text", !!textTarget);
+    }
+
+    window.addEventListener("mousemove", (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      body.classList.add("custom-cursor-active", "custom-cursor-ready");
+      setHoverState(event.target);
+      queueRender();
+    }, { passive: true });
+
+    document.addEventListener("mouseover", (event) => {
+      setHoverState(event.target);
+    }, { passive: true });
+
+    document.addEventListener("mouseout", (event) => {
+      if (event.relatedTarget) return;
+      body.classList.remove("custom-cursor-ready", "custom-cursor-hover", "custom-cursor-text");
+    }, { passive: true });
+
+    window.addEventListener("blur", () => {
+      body.classList.remove("custom-cursor-ready", "custom-cursor-hover", "custom-cursor-text");
+    });
+  })();
+
+  /* =========================
      LAZY VIDEO LOADING
      ========================= */
   (() => {
@@ -113,9 +195,12 @@
       e.preventDefault();
       const target = document.querySelector(href);
       if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+        const targetTop = window.pageYOffset + target.getBoundingClientRect().top;
+        const extraOffset = href === "#services" ? Math.min(window.innerHeight * 0.03, 10) : 0;
+
+        window.scrollTo({
+          top: Math.max(targetTop + extraOffset, 0),
+          behavior: 'smooth'
         });
         
         // Close mobile menu after clicking link
@@ -623,7 +708,54 @@
       });
     };
 
-    window.addEventListener("DOMContentLoaded", () => requestAnimationFrame(reveal), { once: true });
+    const queueReveal = () => requestAnimationFrame(reveal);
+
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", queueReveal, { once: true });
+    } else {
+      queueReveal();
+    }
+  })();
+
+  /* =========================
+     WORKFLOW PAGE REVEAL
+     ========================= */
+  (() => {
+    const cards = Array.from(
+      document.querySelectorAll(
+        ".workflow-page .workflow-overview-card, .workflow-page .workflow-pricing-card, .workflow-page .workflow-breakdown-card, .workflow-page .contact-footer"
+      )
+    );
+    if (!cards.length || prefersReducedMotion.matches) return;
+
+    cards.forEach((card) => {
+      card.style.opacity = "0";
+      card.style.transform = "scale(0.86)";
+      card.style.animation = "none";
+    });
+
+    const reveal = () => {
+      cards.forEach((card, index) => {
+        const delay = Math.min(index * 140, 560);
+        window.setTimeout(() => {
+          card.style.animation = "bouncyZoomIn 900ms cubic-bezier(0.2, 1.1, 0.4, 1) both";
+          card.style.opacity = "1";
+          card.style.transform = "scale(1)";
+        }, delay);
+      });
+    };
+
+    const queueReveal = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(reveal);
+      });
+    };
+
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", queueReveal, { once: true });
+    } else {
+      queueReveal();
+    }
   })();
 
   /* =========================
@@ -1009,5 +1141,4 @@
   `;
   document.head.appendChild(focusStyle);
 
-  console.log('✨ Portfolio initialized successfully');
 })();

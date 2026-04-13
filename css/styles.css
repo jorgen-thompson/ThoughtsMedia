@@ -610,11 +610,11 @@ body::before {
   text-transform: uppercase;
   text-align: center;
   margin: 0;
-  background: linear-gradient(180deg, rgba(255, 248, 242, 0.58), rgba(228, 180, 160, 0.5) 42%, rgba(176, 106, 84, 0.3) 76%, rgba(22, 18, 18, 0.5));
+  background: linear-gradient(180deg, rgba(255, 248, 242, 0.68), rgba(228, 180, 160, 0.58) 42%, rgba(176, 106, 84, 0.38) 76%, rgba(22, 18, 18, 0.56));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  opacity: 0.7;
+  opacity: 0.82;
   mix-blend-mode: screen;
   filter: blur(0.4px);
   text-shadow: 0 0 32px rgba(255, 140, 96, 0.06);

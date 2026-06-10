@@ -843,7 +843,7 @@ body::before {
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 10%;
 }
 
 @media (max-width: 900px) {
@@ -1997,7 +1997,7 @@ body::before {
 .workflow-breakdown-grid {
   margin-top: clamp(22px, 3vh, 30px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: clamp(16px, 2vw, 22px);
 }
 
@@ -2042,6 +2042,132 @@ body::before {
   gap: 10px;
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.7;
+}
+
+.workflow-pricing-table {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(13px, 1.4vw, 15px);
+}
+
+.workflow-pricing-table thead th {
+  padding: 6px 10px 8px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  border-bottom: 1px solid rgba(78, 223, 255, 0.12);
+}
+
+.workflow-pricing-table thead th:last-child {
+  text-align: right;
+}
+
+.workflow-pricing-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.workflow-pricing-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.workflow-pricing-table tbody td {
+  padding: 10px 10px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.workflow-pricing-quote {
+  white-space: nowrap;
+  text-align: right;
+  font-weight: 600;
+  color: rgba(255, 233, 220, 0.96) !important;
+}
+
+.workflow-pricing-quote--add {
+  color: rgba(134, 239, 172, 0.9) !important;
+}
+
+.workflow-retainer-card {
+  margin-top: clamp(22px, 3vh, 30px);
+  padding: clamp(20px, 2.8vw, 32px);
+  border-radius: 22px;
+  background: rgba(9, 12, 18, 0.88);
+  border: 1px solid rgba(78, 223, 255, 0.18);
+  box-shadow: 0 0 60px rgba(34, 211, 238, 0.08);
+}
+
+.workflow-retainer-table-wrap {
+  overflow-x: auto;
+  margin-top: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.workflow-retainer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(13px, 1.4vw, 15px);
+}
+
+.workflow-retainer-table thead th {
+  padding: 6px 14px 10px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  border-bottom: 1px solid rgba(78, 223, 255, 0.12);
+  white-space: nowrap;
+}
+
+.workflow-retainer-table thead th:last-child {
+  text-align: right;
+}
+
+.workflow-retainer-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.workflow-retainer-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.workflow-retainer-table tbody td {
+  padding: 14px 14px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.55;
+  vertical-align: top;
+}
+
+.workflow-retainer-tier {
+  white-space: nowrap;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.96) !important;
+  min-width: 110px;
+}
+
+.workflow-retainer-table .workflow-pricing-quote {
+  white-space: nowrap;
+  text-align: right;
+  vertical-align: top;
+  min-width: 120px;
+}
+
+.workflow-retainer-note {
+  margin: 22px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(78, 223, 255, 0.1);
+  font-size: clamp(13px, 1.4vw, 15px);
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.7;
+}
+
+.workflow-retainer-note strong {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
 }
 
 .workflow-breakdown-copy {

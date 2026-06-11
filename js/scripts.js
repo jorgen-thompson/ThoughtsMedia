@@ -11,9 +11,8 @@
   const dropdownToggles = document.querySelectorAll(".nav-dropdown .dropdown-toggle");
   const year = document.getElementById("year");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const hasFinePointer = window.matchMedia("(pointer: fine)");
 
-  function loadVideo(video) {
+function loadVideo(video) {
     if (!video) return Promise.resolve(null);
     if (video.dataset.videoLoaded === "true") return Promise.resolve(video);
 
@@ -46,115 +45,6 @@
   // Set current year
   if (year) year.textContent = new Date().getFullYear();
 
-  /* =========================
-     VIGNETTE MOUSE TRACKING
-     ========================= */
-  (() => {
-    const vignette = document.querySelector(".vignette");
-    const rootStyle = document.documentElement.style;
-    let rafId = null;
-
-    if (!vignette || prefersReducedMotion.matches || !hasFinePointer.matches) return;
-
-    function setVignettePos(clientX, clientY) {
-      const x = (clientX / window.innerWidth) * 100;
-      const y = (clientY / window.innerHeight) * 100;
-      rootStyle.setProperty("--mx", `${x}%`);
-      rootStyle.setProperty("--my", `${y}%`);
-      vignette?.style.setProperty("--mx", `${x}%`);
-      vignette?.style.setProperty("--my", `${y}%`);
-    }
-
-    window.addEventListener("mousemove", (e) => {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(() => {
-        rafId = null;
-        setVignettePos(e.clientX, e.clientY);
-      });
-    }, { passive: true });
-  })();
-
-  /* =========================
-     CUSTOM CURSOR
-     ========================= */
-  (() => {
-    if (prefersReducedMotion.matches || !hasFinePointer.matches) return;
-
-    const body = document.body;
-    if (!body) return;
-
-    const cursorDot = document.createElement("div");
-    const cursorRing = document.createElement("div");
-    cursorDot.className = "cursor-dot";
-    cursorRing.className = "cursor-ring";
-    body.append(cursorRing, cursorDot);
-
-    const interactiveSelector = [
-      "a",
-      "button",
-      ".project-card",
-      ".project-action",
-      ".projects-arrow",
-      ".submit",
-      ".dropdown-toggle",
-      "input",
-      "textarea",
-      "summary",
-      "[role='button']"
-    ].join(", ");
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-    let rafId = null;
-
-    function renderCursor() {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-      cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-
-      if (Math.abs(mouseX - ringX) > 0.15 || Math.abs(mouseY - ringY) > 0.15) {
-        rafId = window.requestAnimationFrame(renderCursor);
-      } else {
-        rafId = null;
-      }
-    }
-
-    function queueRender() {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(renderCursor);
-    }
-
-    function setHoverState(target) {
-      const interactiveTarget = target?.closest?.(interactiveSelector);
-      const textTarget = target?.closest?.("input, textarea");
-      body.classList.toggle("custom-cursor-hover", !!interactiveTarget && !textTarget);
-      body.classList.toggle("custom-cursor-text", !!textTarget);
-    }
-
-    window.addEventListener("mousemove", (event) => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
-      body.classList.add("custom-cursor-active", "custom-cursor-ready");
-      setHoverState(event.target);
-      queueRender();
-    }, { passive: true });
-
-    document.addEventListener("mouseover", (event) => {
-      setHoverState(event.target);
-    }, { passive: true });
-
-    document.addEventListener("mouseout", (event) => {
-      if (event.relatedTarget) return;
-      body.classList.remove("custom-cursor-ready", "custom-cursor-hover", "custom-cursor-text");
-    }, { passive: true });
-
-    window.addEventListener("blur", () => {
-      body.classList.remove("custom-cursor-ready", "custom-cursor-hover", "custom-cursor-text");
-    });
-  })();
 
   /* =========================
      LAZY VIDEO LOADING
@@ -569,6 +459,36 @@
         e.preventDefault();
         stepProject(1);
       }
+    });
+  })();
+
+  /* =========================
+     STATIC PROJECTS GRID
+     ========================= */
+  (() => {
+    const gridCards = Array.from(document.querySelectorAll(".projects-grid-static .project-card"));
+    if (!gridCards.length) return;
+
+    gridCards.forEach((card) => {
+      const video = card.querySelector("video.lazy-video");
+
+      card.addEventListener("click", () => {
+        const href = card.getAttribute("data-href");
+        if (href) window.location.href = href;
+      });
+
+      if (!video || prefersReducedMotion.matches) return;
+
+      card.addEventListener("mouseenter", () => {
+        loadVideo(video).then(() => {
+          const play = video.play();
+          if (play && typeof play.catch === "function") play.catch(() => {});
+        });
+      });
+
+      card.addEventListener("mouseleave", () => {
+        video.pause();
+      });
     });
   })();
 
@@ -1043,20 +963,13 @@
     const header = document.querySelector('.topbar');
     if (!header) return;
 
-    let lastScroll = 0;
-
     window.addEventListener('scroll', () => {
-      const currentScroll = window.scrollY;
-
-      // Add shadow when scrolled
-      if (currentScroll > 10) {
-        header.style.boxShadow = 
+      if (window.scrollY > 10) {
+        header.style.boxShadow =
           'inset 0 0 0 1px rgba(255, 214, 165, 0.10), 0 4px 20px rgba(0, 0, 0, 0.4)';
       } else {
         header.style.boxShadow = 'inset 0 0 0 1px rgba(255, 214, 165, 0.10)';
       }
-
-      lastScroll = currentScroll;
     }, { passive: true });
   })();
 

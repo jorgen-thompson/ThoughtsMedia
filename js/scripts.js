@@ -592,7 +592,7 @@ function loadVideo(video) {
 
     cards.forEach((card) => {
       card.style.opacity = "0";
-      card.style.transform = "scale(0.86)";
+      card.style.transform = "translateY(18px)";
       card.style.animation = "none";
     });
 
@@ -600,9 +600,9 @@ function loadVideo(video) {
       cards.forEach((card, index) => {
         const delay = Math.min(index * 140, 560);
         window.setTimeout(() => {
-          card.style.animation = "bouncyZoomIn 900ms cubic-bezier(0.2, 1.1, 0.4, 1) both";
+          card.style.animation = "bouncyZoomIn 500ms ease both";
           card.style.opacity = "1";
-          card.style.transform = "scale(1)";
+          card.style.transform = "translateY(0)";
         }, delay);
       });
     };
@@ -629,16 +629,16 @@ function loadVideo(video) {
 
     nodes.forEach((node) => {
       node.style.opacity = "0";
-      node.style.transform = "scale(0.86)";
+      node.style.transform = "translateY(18px)";
       node.style.animation = "none";
     });
 
     const revealNodes = () => {
       nodes.forEach((node, index) => {
         window.setTimeout(() => {
-          node.style.animation = "bouncyZoomIn 1100ms cubic-bezier(0.2, 1.1, 0.4, 1) both";
+          node.style.animation = "bouncyZoomIn 500ms ease both";
           node.style.opacity = "1";
-          node.style.transform = "scale(1)";
+          node.style.transform = "translateY(0)";
         }, index * 140);
       });
     };

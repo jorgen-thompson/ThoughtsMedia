@@ -997,6 +997,15 @@ function loadVideo(video) {
   document.head.appendChild(focusStyle);
 
   /* =========================
+     BACK LINK ARROW
+     ========================= */
+  document.querySelectorAll('.project-back').forEach(link => {
+    const label = link.textContent.trim();
+    if (!link.getAttribute('aria-label')) link.setAttribute('aria-label', label);
+    link.innerHTML = '<svg width="44" height="12" viewBox="0 0 44 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M43 6H1M8 1L1 6L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  });
+
+  /* =========================
      BACK TO TOP BUTTON
      ========================= */
   (() => {

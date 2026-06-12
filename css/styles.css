@@ -3039,3 +3039,47 @@ button:focus-visible {
 .dropdown-toggle:focus-visible {
   outline-color: rgba(255, 214, 165, 0.8);
 }
+
+/* =========================
+   BACK TO TOP BUTTON
+   ========================= */
+.back-to-top {
+  position: fixed;
+  bottom: clamp(20px, 3vh, 32px);
+  right: clamp(20px, 3vw, 32px);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(16, 14, 20, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.55);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 250ms ease, transform 250ms ease, border-color 200ms ease, color 200ms ease, background 200ms ease;
+  z-index: 1000;
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  border-color: rgba(192, 66, 26, 0.5);
+  background: var(--accent-dim);
+  color: rgba(255, 220, 200, 0.96);
+  outline: none;
+}
+
+.back-to-top svg {
+  width: 16px;
+  height: 16px;
+}

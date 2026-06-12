@@ -996,4 +996,23 @@ function loadVideo(video) {
   `;
   document.head.appendChild(focusStyle);
 
+  /* =========================
+     BACK TO TOP BUTTON
+     ========================= */
+  (() => {
+    const btn = document.createElement('button');
+    btn.className = 'back-to-top';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    document.body.appendChild(btn);
+
+    window.addEventListener('scroll', () => {
+      btn.classList.toggle('is-visible', window.scrollY > 300);
+    }, { passive: true });
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+
 })();

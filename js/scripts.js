@@ -583,77 +583,27 @@ function loadVideo(video) {
      WORKFLOW PAGE REVEAL
      ========================= */
   (() => {
-    const cards = Array.from(
-      document.querySelectorAll(
-        ".workflow-page .workflow-overview-card, .workflow-page .workflow-pricing-card, .workflow-page .workflow-breakdown-card, .workflow-page .contact-footer"
-      )
-    );
-    if (!cards.length || prefersReducedMotion.matches) return;
+    const els = Array.from(document.querySelectorAll(
+      ".workflow-page .workflow-pricing-title, .workflow-page .workflow-retainer-card, .workflow-page .workflow-pricing-card"
+    ));
+    if (!els.length || prefersReducedMotion.matches) return;
 
-    cards.forEach((card) => {
-      card.style.opacity = "0";
-      card.style.transform = "translateY(18px)";
-      card.style.animation = "none";
+    els.forEach(el => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(18px)";
+      el.style.transition = "opacity 500ms ease, transform 500ms ease";
     });
 
-    const reveal = () => {
-      cards.forEach((card, index) => {
-        const delay = Math.min(index * 140, 560);
-        window.setTimeout(() => {
-          card.style.animation = "bouncyZoomIn 500ms ease both";
-          card.style.opacity = "1";
-          card.style.transform = "translateY(0)";
-        }, delay);
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+        obs.unobserve(entry.target);
       });
-    };
+    }, { threshold: 0.05, rootMargin: "0px" });
 
-    const queueReveal = () => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(reveal);
-      });
-    };
-
-    if (document.readyState === "loading") {
-      window.addEventListener("DOMContentLoaded", queueReveal, { once: true });
-    } else {
-      queueReveal();
-    }
-  })();
-
-  /* =========================
-     WORKFLOW NODE REVEAL
-     ========================= */
-  (() => {
-    const nodes = Array.from(document.querySelectorAll(".workflow-page .workflow-stage-card"));
-    if (!nodes.length || prefersReducedMotion.matches) return;
-
-    nodes.forEach((node) => {
-      node.style.opacity = "0";
-      node.style.transform = "translateY(18px)";
-      node.style.animation = "none";
-    });
-
-    const revealNodes = () => {
-      nodes.forEach((node, index) => {
-        window.setTimeout(() => {
-          node.style.animation = "bouncyZoomIn 500ms ease both";
-          node.style.opacity = "1";
-          node.style.transform = "translateY(0)";
-        }, index * 140);
-      });
-    };
-
-    const queueReveal = () => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(revealNodes);
-      });
-    };
-
-    if (document.readyState === "loading") {
-      window.addEventListener("DOMContentLoaded", queueReveal, { once: true });
-    } else {
-      queueReveal();
-    }
+    els.forEach(el => observer.observe(el));
   })();
 
   /* =========================

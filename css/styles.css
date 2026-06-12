@@ -1565,15 +1565,15 @@ body {
 .project-back {
   display: inline-flex;
   align-items: center;
-  width: fit-content;
-  position: relative;
-  z-index: 50;
+  position: fixed;
+  top: calc(clamp(68px, 8vh, 92px) + 20px);
+  left: clamp(140px, 20vw, 260px);
+  z-index: 1500;
   pointer-events: auto;
   color: var(--accent);
   text-decoration: none;
   opacity: 0.9;
-  margin-bottom: clamp(20px, 3vh, 28px);
-  transition: opacity 200ms ease, transform 200ms ease;
+  transition: opacity 200ms ease, transform 200ms ease, filter 200ms ease;
 }
 
 .project-back:hover {

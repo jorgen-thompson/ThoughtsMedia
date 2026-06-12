@@ -11,6 +11,7 @@
   const dropdownToggles = document.querySelectorAll(".nav-dropdown .dropdown-toggle");
   const year = document.getElementById("year");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
 function loadVideo(video) {
     if (!video) return Promise.resolve(null);
@@ -499,24 +500,23 @@ function loadVideo(video) {
     const tiles = Array.from(document.querySelectorAll(".projects-page .project-tile"));
     if (!tiles.length) return;
 
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const tile = entry.target;
-            tile.style.animationDelay = "0ms";
-            tile.classList.add("is-revealed");
-            obs.unobserve(tile);
-          });
-        },
-        { threshold: 0.05, rootMargin: "0px" }
-      );
-
-      tiles.forEach((tile) => observer.observe(tile));
-    } else {
+    if (isMobile || !("IntersectionObserver" in window)) {
       tiles.forEach((tile) => tile.classList.add("is-revealed"));
+      return;
     }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-revealed");
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.05, rootMargin: "0px" }
+    );
+
+    tiles.forEach((tile) => observer.observe(tile));
   })();
 
   /* =========================
@@ -564,7 +564,7 @@ function loadVideo(video) {
 
     const reveal = () => {
       cards.forEach((card, index) => {
-        const delay = Math.min(index * 120, 480);
+        const delay = isMobile ? 0 : Math.min(index * 120, 480);
         card.style.animationDelay = `${delay}ms`;
         card.classList.add("is-revealed");
       });
@@ -586,7 +586,7 @@ function loadVideo(video) {
     const els = Array.from(document.querySelectorAll(
       ".workflow-page .workflow-pricing-title, .workflow-page .workflow-retainer-card, .workflow-page .workflow-pricing-card"
     ));
-    if (!els.length || prefersReducedMotion.matches) return;
+    if (!els.length || prefersReducedMotion.matches || isMobile) return;
 
     els.forEach(el => {
       el.style.opacity = "0";
@@ -876,6 +876,8 @@ function loadVideo(video) {
         }
       });
     }, { threshold: 0, rootMargin: '0px' });
+
+    if (isMobile) return;
 
     // Skip archive-section elements — their tiles have their own reveal
     document.querySelectorAll('section:not(.archive-section)').forEach(section => {

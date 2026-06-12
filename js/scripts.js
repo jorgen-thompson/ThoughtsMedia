@@ -510,7 +510,7 @@ function loadVideo(video) {
             obs.unobserve(tile);
           });
         },
-        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+        { threshold: 0.05, rootMargin: "0px" }
       );
 
       tiles.forEach((tile) => observer.observe(tile));
@@ -919,28 +919,22 @@ function loadVideo(video) {
      INTERSECTION OBSERVER FOR ANIMATIONS
      ========================= */
   (() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -10% 0px'
-    };
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
         }
       });
-    }, observerOptions);
+    }, { threshold: 0, rootMargin: '0px' });
 
-    // Observe sections for fade-in animations
-    document.querySelectorAll('section').forEach(section => {
+    // Skip archive-section elements — their tiles have their own reveal
+    document.querySelectorAll('section:not(.archive-section)').forEach(section => {
       section.style.opacity = '0';
       section.style.transform = 'translateY(20px)';
       section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
       observer.observe(section);
     });
 
-    // Add CSS for visible state
     const style = document.createElement('style');
     style.textContent = `
       section.is-visible {
@@ -1002,7 +996,7 @@ function loadVideo(video) {
   document.querySelectorAll('.project-back').forEach(link => {
     const label = link.textContent.trim();
     if (!link.getAttribute('aria-label')) link.setAttribute('aria-label', label);
-    link.innerHTML = '<svg width="44" height="12" viewBox="0 0 44 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M43 6H1M8 1L1 6L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    link.innerHTML = '<svg width="52" height="14" viewBox="0 0 52 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M51 7H1M9 1L1 7L9 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   });
 
   /* =========================

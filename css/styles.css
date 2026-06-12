@@ -1265,44 +1265,51 @@ body {
   animation: fadeInUp 1s ease-out both;
 }
 
-.projects-filters--archive {
-  margin-bottom: clamp(32px, 6vh, 56px);
-}
-
-.projects-page .projects-filter-btn {
-  border-color: rgba(255, 255, 255, 0.10);
-  background: rgba(255, 255, 255, 0.035);
-  box-shadow: none;
-  transform: none;
-  opacity: 0;
-  transform: scale(0.86);
-}
-
-.projects-page .projects-filter-btn.is-active,
-.projects-page .projects-filter-btn:hover {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
-}
-
-.projects-page .projects-filter-btn.is-revealed {
-  animation: bouncyZoomIn 650ms cubic-bezier(0.2, 1.1, 0.4, 1) both;
-  transform-origin: center;
-  opacity: 1;
-  transform: scale(1);
-}
-
-.projects-filter-btn .filter-count {
-  display: inline-flex;
-  align-items: center;
+.archive-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: clamp(40px, 7vh, 64px);
   justify-content: center;
-  padding: 2px 8px;
-  margin-left: 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.10);
-  color: var(--label);
-  font-size: 11px;
-  letter-spacing: 0.06em;
+}
+
+.archive-nav-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-brand);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
+}
+
+.archive-nav-btn:hover,
+.archive-nav-btn:focus-visible {
+  border-color: rgba(192, 66, 26, 0.5);
+  background: var(--accent-dim);
+  color: rgba(255, 220, 200, 0.96);
+  outline: none;
+}
+
+.archive-section {
+  margin-bottom: clamp(48px, 8vh, 80px);
+  scroll-margin-top: 90px;
+}
+
+.archive-section-title {
+  font-family: var(--font-brand);
+  font-size: clamp(10px, 0.9vw, 12px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: clamp(20px, 3vh, 28px);
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .projects-grid {

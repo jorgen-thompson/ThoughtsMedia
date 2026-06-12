@@ -499,82 +499,24 @@ function loadVideo(video) {
     const tiles = Array.from(document.querySelectorAll(".projects-page .project-tile"));
     if (!tiles.length) return;
 
-    const reveal = () => {
-      const filters = Array.from(document.querySelectorAll(".projects-page .projects-filter-btn"));
-      filters.forEach((btn, index) => {
-        const delay = Math.min(index * 80, 320);
-        btn.style.animationDelay = `${delay}ms`;
-        btn.classList.add("is-revealed");
-      });
-
-      tiles.forEach((tile, index) => {
-        const delay = 200 + Math.min(index * 90, 540);
-        tile.style.animationDelay = `${delay}ms`;
-        tile.classList.add("is-revealed");
-      });
-    };
-
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver(
         (entries, obs) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              reveal();
-              obs.disconnect();
-            }
+            if (!entry.isIntersecting) return;
+            const tile = entry.target;
+            tile.style.animationDelay = "0ms";
+            tile.classList.add("is-revealed");
+            obs.unobserve(tile);
           });
         },
-        { threshold: 0.2 }
+        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
       );
 
-      observer.observe(tiles[0]);
+      tiles.forEach((tile) => observer.observe(tile));
     } else {
-      reveal();
+      tiles.forEach((tile) => tile.classList.add("is-revealed"));
     }
-  })();
-
-  /* =========================
-     PROJECTS ARCHIVE FILTERS
-     ========================= */
-  (() => {
-    const filterButtons = Array.from(document.querySelectorAll(".projects-page .projects-filter-btn"));
-    const tiles = Array.from(document.querySelectorAll(".projects-page .project-tile"));
-    if (!filterButtons.length || !tiles.length) return;
-
-    const matchesFilter = (tile, filter) => {
-      if (filter === "all") return true;
-      const categories = (tile.getAttribute("data-category") || "")
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
-      return categories.includes(filter);
-    };
-
-    const applyFilter = (filter) => {
-      tiles.forEach((tile) => {
-        const isVisible = matchesFilter(tile, filter);
-        tile.style.display = isVisible ? "" : "none";
-        tile.setAttribute("aria-hidden", isVisible ? "false" : "true");
-      });
-    };
-
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const filter = (button.getAttribute("data-filter") || "all").toLowerCase();
-
-        filterButtons.forEach((btn) => {
-          const isActive = btn === button;
-          btn.classList.toggle("is-active", isActive);
-          btn.setAttribute("aria-pressed", isActive ? "true" : "false");
-        });
-
-        applyFilter(filter);
-      });
-    });
-
-    const initialActiveButton = filterButtons.find((btn) => btn.classList.contains("is-active")) || filterButtons[0];
-    const initialFilter = (initialActiveButton?.getAttribute("data-filter") || "all").toLowerCase();
-    applyFilter(initialFilter);
   })();
 
   /* =========================

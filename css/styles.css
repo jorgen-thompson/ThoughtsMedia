@@ -3076,6 +3076,12 @@ button:focus-visible {
   height: 16px;
 }
 
+/* Prevent iOS double-tap delay on all interactive elements */
+a, button, [role="button"],
+.project-card, .project-tile, .archive-nav-btn {
+  touch-action: manipulation;
+}
+
 /* =========================
    MOBILE LAYOUT (≤ 768px)
    ========================= */

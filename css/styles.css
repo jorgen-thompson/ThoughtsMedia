@@ -1567,7 +1567,7 @@ body {
   align-items: center;
   position: fixed;
   top: calc(clamp(68px, 8vh, 92px) + 20px);
-  left: clamp(140px, 20vw, 260px);
+  left: clamp(100px, 14vw, 180px);
   z-index: 1500;
   pointer-events: auto;
   color: var(--accent);

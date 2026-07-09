@@ -952,6 +952,65 @@ function loadVideo(video) {
   });
 
   /* =========================
+     CURRENCY SWITCHER
+     ========================= */
+  (() => {
+    const select = document.getElementById('currencySelect');
+    if (!select) return;
+
+    const quotes = document.querySelectorAll('.workflow-pricing-quote[data-usd]');
+
+    function applyCurrency(currency) {
+      quotes.forEach(el => {
+        const val = el.dataset[currency];
+        if (val) el.textContent = val;
+      });
+    }
+
+    const saved = localStorage.getItem('preferredCurrency');
+    if (saved && ['usd', 'cad', 'eur'].includes(saved)) {
+      select.value = saved;
+    }
+
+    applyCurrency(select.value);
+    select.addEventListener('change', () => {
+      localStorage.setItem('preferredCurrency', select.value);
+      applyCurrency(select.value);
+    });
+  })();
+
+  /* =========================
+     HERO VIDEO MODAL
+     ========================= */
+  (() => {
+    const thumbBtn = document.getElementById('heroThumbBtn');
+    if (!thumbBtn) return;
+
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoModalFrame');
+    const videoSrc = 'https://www.youtube.com/embed/i8IpfuBJIdc?autoplay=1&rel=0';
+
+    function openModal() {
+      frame.src = videoSrc;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      frame.src = '';
+      document.body.style.overflow = '';
+    }
+
+    thumbBtn.addEventListener('click', openModal);
+    modal.querySelector('.video-modal-backdrop').addEventListener('click', closeModal);
+    modal.querySelector('.video-modal-close').addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  })();
+
+  /* =========================
      BACK TO TOP BUTTON
      ========================= */
   (() => {

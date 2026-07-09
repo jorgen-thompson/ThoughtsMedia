@@ -537,6 +537,10 @@ body {
   position: relative;
   width: 100%;
   max-width: 740px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   margin: 0 auto clamp(28px, 5vh, 44px);
   border-radius: 14px;
   overflow: hidden;
@@ -1962,6 +1966,13 @@ body {
   font-family: var(--font-p);
 }
 
+.workflow-title-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 .workflow-overview-title {
   margin: 0;
   font-family: var(--font-brand);
@@ -1970,6 +1981,44 @@ body {
   text-transform: uppercase;
   color: var(--label);
   line-height: 1.04;
+}
+
+.currency-selector {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.currency-selector select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-brand);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 32px 7px 14px;
+  cursor: pointer;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
+}
+
+.currency-selector select:hover,
+.currency-selector select:focus {
+  border-color: rgba(192, 66, 26, 0.5);
+  color: rgba(255, 220, 200, 0.95);
+  background-color: var(--accent-dim);
+}
+
+.currency-selector select option {
+  background: #1a1620;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .workflow-overview-desc {
@@ -3165,4 +3214,59 @@ a, button, [role="button"],
     width: 38px;
     height: 38px;
   }
+}
+
+/* ── Video modal ── */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.video-modal[hidden] { display: none; }
+
+.video-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  cursor: pointer;
+}
+
+.video-modal-inner {
+  position: relative;
+  width: min(900px, 90vw);
+  z-index: 1;
+}
+
+.video-modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 32px;
+  line-height: 1;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+.video-modal-close:hover { color: #fff; }
+
+.video-modal-embed {
+  position: relative;
+  padding-top: 56.25%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.video-modal-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }

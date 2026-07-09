@@ -129,10 +129,10 @@
         <div class="hero-content">
           <h1 id="hero-title" class="hero-name">Jørgen Thompson</h1>
           <p class="hero-tagline">Video Editor. Motion Designer.</p>
-          <a class="hero-thumb" href="https://www.youtube.com/watch?v=i8IpfuBJIdc" target="_blank" rel="noopener noreferrer" aria-label="Watch motion design showreel on YouTube">
+          <button class="hero-thumb" id="heroThumbBtn" aria-label="Watch motion design showreel" type="button">
             <img class="hero-thumb-img" src="Assets/Images/motion_design_showreel.png" alt="Motion design showreel" />
             <div class="hero-play-btn" aria-hidden="true"><span>&#9654;</span></div>
-          </a>
+          </button>
           <div class="hero-cta">
             <a href="#projects" class="btn btn-primary">View My Work</a>
             <a href="workflow.html" class="btn btn-secondary">Get a Quote</a>
@@ -434,5 +434,15 @@
     </main>
 
     <!-- Decorative vignette overlay -->
+
+    <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-label="Showreel video" hidden>
+      <div class="video-modal-backdrop"></div>
+      <div class="video-modal-inner">
+        <button class="video-modal-close" aria-label="Close video">&times;</button>
+        <div class="video-modal-embed">
+          <iframe id="videoModalFrame" src="" title="Motion design showreel" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

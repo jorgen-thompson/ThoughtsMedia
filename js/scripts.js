@@ -523,6 +523,49 @@ function loadVideo(video) {
   })();
 
   /* =========================
+     PROJECTS ARCHIVE FILTER
+     ========================= */
+  (() => {
+    const filterButtons = Array.from(document.querySelectorAll(".archive-nav-btn[data-filter]"));
+    const archiveSections = Array.from(document.querySelectorAll(".archive-section[id]"));
+    if (!filterButtons.length || !archiveSections.length) return;
+
+    function applyFilter(filterId) {
+      archiveSections.forEach((section) => {
+        const shouldShow = filterId === "all" || section.id === filterId;
+        const isHidden = section.classList.contains("is-filtered-out");
+
+        if (shouldShow && isHidden) {
+          section.classList.add("is-filter-entering");
+          section.classList.remove("is-filtered-out");
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              section.classList.remove("is-filter-entering");
+            });
+          });
+        } else if (!shouldShow && !isHidden) {
+          section.classList.add("is-filtered-out");
+          section.classList.remove("is-filter-entering");
+        }
+      });
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filterId = btn.dataset.filter;
+
+        filterButtons.forEach((b) => {
+          const isActive = b === btn;
+          b.classList.toggle("is-active", isActive);
+          b.setAttribute("aria-pressed", String(isActive));
+        });
+
+        applyFilter(filterId);
+      });
+    });
+  })();
+
+  /* =========================
      PROJECT THUMB VIDEO PREVIEW FRAMES
      ========================= */
   (() => {
@@ -951,7 +994,7 @@ function loadVideo(video) {
   document.querySelectorAll('.project-back').forEach(link => {
     const label = link.textContent.trim();
     if (!link.getAttribute('aria-label')) link.setAttribute('aria-label', label);
-    link.innerHTML = '<svg width="52" height="14" viewBox="0 0 52 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M51 7H1M9 1L1 7L9 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    link.innerHTML = '<svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17 8H1M9 1L1 8L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   });
 
   /* =========================

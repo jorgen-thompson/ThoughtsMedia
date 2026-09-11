@@ -490,6 +490,8 @@ function loadVideo(video) {
 
       card.addEventListener("mouseleave", () => {
         video.pause();
+        video.currentTime = 0;
+        video.load();
       });
     });
   })();

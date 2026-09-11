@@ -1687,26 +1687,26 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(16, 18, 26, 0.74);
-  color: #fff;
-  font-size: 26px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: rgba(255, 248, 244, 0.98);
+  font-size: 20px;
+  padding-left: 3px;
   line-height: 1;
   display: grid;
   place-items: center;
   cursor: pointer;
   z-index: 3;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
-  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, opacity 180ms ease;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  transition: transform 220ms ease, background 220ms ease, opacity 180ms ease;
 }
 
 .project-media-play-btn:hover {
-  transform: translate(-50%, -50%) scale(1.04);
-  background: rgba(20, 24, 34, 0.88);
-  border-color: rgba(255, 255, 255, 0.26);
+  transform: translate(-50%, -50%) scale(1.12);
+  background: #d14a1e;
 }
 
 .project-media-play-btn.is-hidden {

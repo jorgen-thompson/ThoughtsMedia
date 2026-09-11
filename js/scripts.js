@@ -29,6 +29,7 @@ function loadVideo(video) {
       }
     });
 
+    video.preload = "auto";
     video.dataset.videoLoaded = "true";
     video.load();
 
@@ -69,7 +70,7 @@ function loadVideo(video) {
           obs.unobserve(entry.target);
         });
       },
-      { rootMargin: "300px 0px" }
+      { rootMargin: "600px 0px" }
     );
 
     visibleLazyVideos.forEach((video) => observer.observe(video));

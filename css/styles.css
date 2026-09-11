@@ -943,20 +943,34 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
   scroll-snap-align: center;
-  transition: opacity 200ms ease, transform 200ms ease, box-shadow 200ms ease, filter 220ms ease;
+  transition: opacity 200ms ease, transform 200ms ease;
   cursor: pointer;
   display: flex;
   align-items: flex-end;
-  filter: blur(0);
+  will-change: transform;
 }
 
 .project-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: 
+  background:
     linear-gradient(to bottom, rgba(0,0,0,0.04) 28%, rgba(0,0,0,0.68)),
     linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,120,80,0.05), rgba(0,0,0,0.12));
+  z-index: 1;
+}
+
+.project-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 20px 42px rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
   z-index: 1;
 }
 
@@ -1039,9 +1053,10 @@ body {
 
 .project-card:hover {
   transform: scale(1.02);
-  box-shadow: 
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 20px 42px rgba(0, 0, 0, 0.42);
+}
+
+.project-card:hover::after {
+  opacity: 1;
 }
 
 .projects-arrow {

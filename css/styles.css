@@ -3312,3 +3312,134 @@ a, button, [role="button"],
   height: 100%;
   border: none;
 }
+
+/* =========================
+   MOBILE REFINEMENTS (≤ 600px)
+   ========================= */
+@media (max-width: 600px) {
+  /* Pricing tables stack into cards so the price column is never cut off */
+  .workflow-retainer-table-wrap {
+    overflow-x: visible;
+  }
+
+  .workflow-retainer-table,
+  .workflow-pricing-table,
+  .workflow-retainer-table tbody,
+  .workflow-pricing-table tbody,
+  .workflow-retainer-table tbody tr,
+  .workflow-pricing-table tbody tr,
+  .workflow-retainer-table tbody td,
+  .workflow-pricing-table tbody td {
+    display: block;
+    width: 100%;
+  }
+
+  .workflow-retainer-table thead,
+  .workflow-pricing-table thead {
+    display: none;
+  }
+
+  .workflow-retainer-table tbody tr,
+  .workflow-pricing-table tbody tr {
+    padding: 16px 0;
+  }
+
+  .workflow-retainer-table tbody td,
+  .workflow-pricing-table tbody td {
+    padding: 0;
+    min-width: 0;
+    white-space: normal;
+    text-align: left;
+  }
+
+  .workflow-retainer-tier {
+    font-size: 16px;
+    margin-bottom: 8px;
+    white-space: normal;
+  }
+
+  .workflow-retainer-table .workflow-pricing-quote,
+  .workflow-pricing-table .workflow-pricing-quote {
+    margin-top: 12px;
+    font-size: 17px;
+    text-align: left;
+    white-space: nowrap;
+  }
+}
+
+/* =========================
+   MOBILE REFINEMENTS (≤ 768px)
+   ========================= */
+@media (max-width: 768px) {
+  /* Back control stays available on phones; in-flow so it can't overlap the header */
+  .project-back {
+    display: inline-flex;
+    position: static;
+    margin-bottom: 18px;
+  }
+
+  /* Card titles stay legible over busy thumbnail artwork */
+  .project-card--has-video::before {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.88));
+  }
+
+  .project-card-title {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Touch targets: 44px minimum */
+  .mobile-menu a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .archive-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 18px;
+  }
+
+  .currency-selector select {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  /* Comfortable minimum text sizes */
+  .hero-tagline,
+  .proof-label,
+  .footer-links-title {
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   MOBILE TOUCH TARGETS (≤ 768px)
+   ========================= */
+@media (max-width: 768px) {
+  .project-action {
+    min-height: 44px;
+  }
+
+  .footer-contact-link,
+  .footer-links-row a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .brand {
+    min-height: 44px;
+  }
+
+  .contact-form .submit,
+  .dropdown-toggle {
+    min-height: 44px;
+  }
+
+  .back-to-top {
+    width: 44px;
+    height: 44px;
+  }
+}
